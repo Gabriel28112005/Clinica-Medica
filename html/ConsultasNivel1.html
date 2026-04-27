@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clínica Médica - Consultas Nivel 1</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/ConsultasNivel1.css" />
+</head>
+<body>
+
+  <header class="cabecera-sitio">
+    <div class="cabecera-interior">
+      <div class="marca">
+        <div class="marca-icono">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="17" stroke="#1a56db" stroke-width="2" fill="#e8f0fe"/>
+            <rect x="16" y="9" width="4" height="18" rx="2" fill="#1a56db"/>
+            <rect x="9" y="16" width="18" height="4" rx="2" fill="#1a56db"/>
+          </svg>
+        </div>
+        <div class="marca-texto">
+          <span class="marca-titulo">Clínica Médica</span>
+          <span class="marca-subtitulo">Consultas importantes</span>
+        </div>
+      </div>
+      <div class="cabecera-usuario">
+        <span id="nombreUsuarioHeader"></span>
+        <span class="etiqueta-rol">Nivel 1</span>
+        <button class="boton-cerrar-sesion" id="botonCerrarSesion">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="contenido-principal">
+
+    <div class="bienvenida">
+      <h1>Bienvenido, <em id="nombreBienvenida"></em></h1>
+      <p class="descripcion">Acceso a consultas avanzadas y estadísticas del sistema.</p>
+    </div>
+
+    <div class="contenedor-pestanas">
+      <div class="barra-pestanas">
+        <button class="pestana activa" data-pestana="citas-medico">📊 Citas por médico</button>
+        <button class="pestana" data-pestana="citas-estado">📋 Citas por estado</button>
+        <button class="pestana" data-pestana="medico-pacientes">🏆 Ranking médicos</button>
+        <button class="pestana" data-pestana="prueba-frecuente">🔬 Pruebas frecuentes</button>
+        <button class="pestana" data-pestana="pacientes-citas">👤 Ranking pacientes</button>
+      </div>
+
+      <!-- Panel: Citas por médico -->
+      <div class="panel-pestana activo" id="panel-citas-medico">
+        <div class="panel-cabecera">
+          <h2>Total de citas por médico</h2>
+          <button class="boton-actualizar" onclick="cargarCitasPorMedico()">↻ Actualizar</button>
+        </div>
+        <table class="tabla-datos">
+          <thead>
+            <tr>
+              <th>Médico</th>
+              <th>Total de citas</th>
+            </tr>
+          </thead>
+          <tbody id="tablaCitasMedico"></tbody>
+        </table>
+      </div>
+
+      <!-- Panel: Citas por estado -->
+      <div class="panel-pestana" id="panel-citas-estado">
+        <div class="panel-cabecera">
+          <h2>Total de citas por estado</h2>
+          <button class="boton-actualizar" onclick="cargarCitasPorEstado()">↻ Actualizar</button>
+        </div>
+        <table class="tabla-datos">
+          <thead>
+            <tr>
+              <th>Estado</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="tablaCitasEstado"></tbody>
+        </table>
+      </div>
+
+      <!-- Panel: Ranking médicos -->
+      <div class="panel-pestana" id="panel-medico-pacientes">
+        <div class="panel-cabecera">
+          <h2>Médicos con más pacientes atendidos</h2>
+          <button class="boton-actualizar" onclick="cargarMedicoMasPacientes()">↻ Actualizar</button>
+        </div>
+        <table class="tabla-datos">
+          <thead>
+            <tr>
+              <th>Médico</th>
+              <th>Pacientes distintos atendidos</th>
+            </tr>
+          </thead>
+          <tbody id="tablaMedicoPacientes"></tbody>
+        </table>
+      </div>
+
+      <!-- Panel: Prueba más realizada -->
+      <div class="panel-pestana" id="panel-prueba-frecuente">
+        <div class="panel-cabecera">
+          <h2>Pruebas diagnósticas más realizadas</h2>
+          <button class="boton-actualizar" onclick="cargarPruebaMasRealizada()">↻ Actualizar</button>
+        </div>
+        <table class="tabla-datos">
+          <thead>
+            <tr>
+              <th>Prueba</th>
+              <th>Veces realizada</th>
+            </tr>
+          </thead>
+          <tbody id="tablaPruebaMasRealizada"></tbody>
+        </table>
+      </div>
+
+      <!-- Panel: Ranking pacientes -->
+      <div class="panel-pestana" id="panel-pacientes-citas">
+        <div class="panel-cabecera">
+          <h2>Pacientes con más citas registradas</h2>
+          <button class="boton-actualizar" onclick="cargarPacientesMasCitas()">↻ Actualizar</button>
+        </div>
+        <table class="tabla-datos">
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Total de citas</th>
+            </tr>
+          </thead>
+          <tbody id="tablaPacientesMasCitas"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="pie-pagina">
+    <span>© 2026 Clínica Médica — Gabriel Peña</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/scriptsFrontend/RutasProtegidas.js"></script>
+  <script src="../assets/scriptsFrontend/Api.js"></script>
+  <script src="../assets/scriptsFrontend/ConsultasNivel1.js"></script>
+
+</body>
+</html>

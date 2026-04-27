@@ -1,5 +1,30 @@
 'use strict';
 
+// Si ya hay sesión activa, redirigir directamente sin mostrar el login
+const tokenExistente = localStorage.getItem('token');
+const nivelExistente = localStorage.getItem('nivel');
+
+if (tokenExistente && nivelExistente !== null) {
+    try {
+        const payload = JSON.parse(atob(tokenExistente.split('.')[1]));
+        const ahora   = Math.floor(Date.now() / 1000);
+
+        if (!payload.exp || payload.exp > ahora) {
+            const nivel = parseInt(nivelExistente);
+            if (nivel === 0)      window.location.href = '/admin';
+            else if (nivel === 1) window.location.href = '/consultasnivel1';
+            else if (nivel === 2) window.location.href = '/consultasnivel2';
+            else if (nivel === 3) window.location.href = '/consultasnivel3';
+        } else {
+            localStorage.removeItem('token');
+            localStorage.removeItem('nivel');
+        }
+    } catch (e) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('nivel');
+    }
+}
+
 const formulario              = document.getElementById('formularioLogin');
 const inputNombreUsuario      = document.getElementById('nombreUsuario');
 const inputContrasena         = document.getElementById('contrasena');

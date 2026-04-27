@@ -7,6 +7,8 @@ let wss;
 function iniciarWebSocket(server) {
     wss = new WebSocket.Server({ server });
 
+    console.log('Servidor WebSocket iniciado.');
+
     wss.on('connection', (ws) => {
         console.log('Cliente conectado por WebSocket.');
 

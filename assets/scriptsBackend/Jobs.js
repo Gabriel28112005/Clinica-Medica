@@ -24,7 +24,7 @@ function iniciarJobs() {
         }
     });
 
-    console.log('Jobs iniciados correctamente.');
+    console.log('Jobs programados iniciados.');
 }
 
 module.exports = { iniciarJobs };

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clínica Médica - Administrador</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/Admin.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="cabecera-sitio">
+    <div class="cabecera-interior">
+      <div class="marca">
+        <div class="marca-icono">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="17" stroke="#1a56db" stroke-width="2" fill="#e8f0fe"/>
+            <rect x="16" y="9" width="4" height="18" rx="2" fill="#1a56db"/>
+            <rect x="9" y="16" width="18" height="4" rx="2" fill="#1a56db"/>
+          </svg>
+        </div>
+        <div class="marca-texto">
+          <span class="marca-titulo">Clínica Médica</span>
+          <span class="marca-subtitulo">Panel de administrador</span>
+        </div>
+      </div>
+      <div class="cabecera-usuario">
+        <span id="nombreUsuarioHeader"></span>
+        <span class="badge-rol">Admin</span>
+        <button id="botonCerrarSesion">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="contenedor-principal">
+
+    <!-- Bienvenida -->
+    <div class="titulo-bienvenida">Bienvenido, <span id="nombreBienvenida"></span></div>
+
+    <!-- Estadísticas -->
+    <div class="grid-estadisticas">
+      <div class="tarjeta-estadistica">
+        <span class="estadistica-numero" id="totalMedicos">-</span>
+        <span class="estadistica-etiqueta">Médicos</span>
+      </div>
+      <div class="tarjeta-estadistica">
+        <span class="estadistica-numero" id="totalPacientes">-</span>
+        <span class="estadistica-etiqueta">Pacientes</span>
+      </div>
+      <div class="tarjeta-estadistica">
+        <span class="estadistica-numero" id="totalCitasPendientes">-</span>
+        <span class="estadistica-etiqueta">Citas pendientes</span>
+      </div>
+      <div class="tarjeta-estadistica">
+        <span class="estadistica-numero" id="totalCitasCompletadas">-</span>
+        <span class="estadistica-etiqueta">Citas completadas</span>
+      </div>
+    </div>
+
+    <!-- Pestañas -->
+    <div class="contenedor-pestanas">
+      <div class="barra-pestanas">
+        <button class="pestana activa" data-pestana="medicos">👨‍⚕️ Médicos</button>
+        <button class="pestana" data-pestana="pacientes">🧑 Pacientes</button>
+        <button class="pestana" data-pestana="especialidades">🏥 Especialidades</button>
+        <button class="pestana" data-pestana="citas">📅 Citas</button>
+        <button class="pestana" data-pestana="tratamientos">💊 Tratamientos</button>
+        <button class="pestana" data-pestana="pruebas">🔬 Pruebas</button>
+        <button class="pestana" data-pestana="estructura">⚙️ Estructura</button>
+      </div>
+
+      <!-- Panel: Médicos -->
+      <div class="panel-pestana activo" id="panel-medicos">
+        <div class="panel-cabecera">
+          <h2>Médicos</h2>
+          <button class="boton-primario" id="botonCrearMedico">+ Nuevo médico</button>
+        </div>
+        <div class="filtros">
+          <div class="filtro-campo">
+            <input type="text" id="filtroBuscarMedico" placeholder="Buscar por nombre o usuario...">
+          </div>
+        </div>
+        <div class="contenedor-tabla">
+          <table class="tabla-admin">
+            <thead>
+              <tr>
+                <th>ID</th><th>Nombre</th><th>Teléfono</th>
+                <th>Usuario</th><th>Nivel</th><th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaMedicos"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel: Pacientes -->
+      <div class="panel-pestana" id="panel-pacientes">
+        <div class="panel-cabecera">
+          <h2>Pacientes</h2>
+          <button class="boton-primario" id="botonCrearPaciente">+ Nuevo paciente</button>
+        </div>
+        <div class="filtros">
+          <div class="filtro-campo">
+            <input type="text" id="filtroBuscarPaciente" placeholder="Buscar por nombre...">
+          </div>
+        </div>
+        <div class="contenedor-tabla">
+          <table class="tabla-admin">
+            <thead>
+              <tr><th>ID</th><th>Nombre</th><th>Teléfono</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="tablaPacientes"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel: Especialidades -->
+      <div class="panel-pestana" id="panel-especialidades">
+        <div class="panel-cabecera">
+          <h2>Especialidades</h2>
+          <button class="boton-primario" id="botonCrearEspecialidad">+ Nueva especialidad</button>
+        </div>
+        <div class="filtros">
+          <div class="filtro-campo">
+            <input type="text" id="filtroBuscarEspecialidad" placeholder="Buscar por nombre...">
+          </div>
+        </div>
+        <div class="contenedor-tabla">
+          <table class="tabla-admin">
+            <thead>
+              <tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="tablaEspecialidades"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel: Citas -->
+      <div class="panel-pestana" id="panel-citas">
+        <div class="panel-cabecera">
+          <h2>Citas</h2>
+          <button class="boton-primario" id="botonCrearCita">+ Nueva cita</button>
+        </div>
+        <div class="filtros">
+          <div class="filtro-campo">
+            <input type="text" id="filtroBuscarCita" placeholder="Buscar por paciente o médico...">
+          </div>
+          <div class="filtro-campo">
+            <select id="filtroEstadoCita">
+              <option value="">Todos los estados</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Completada">Completada</option>
+              <option value="Cancelada">Cancelada</option>
+            </select>
+          </div>
+        </div>
+        <div class="contenedor-tabla">
+          <table class="tabla-admin">
+            <thead>
+              <tr>
+                <th>ID</th><th>Fecha</th><th>Estado</th>
+                <th>Paciente</th><th>Médico</th><th>Diagnóstico</th><th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaCitas"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel: Tratamientos -->
+      <div class="panel-pestana" id="panel-tratamientos">
+        <div class="panel-cabecera">
+          <h2>Tratamientos</h2>
+          <button class="boton-primario" id="botonCrearTratamiento">+ Nuevo tratamiento</button>
+        </div>
+        <div class="filtros">
+          <div class="filtro-campo">
+            <input type="text" id="filtroBuscarTratamiento" placeholder="Buscar por medicamento o paciente...">
+          </div>
+        </div>
+        <div class="contenedor-tabla">
+          <table class="tabla-admin">
+            <thead>
+              <tr>
+                <th>ID</th><th>Medicamento</th><th>Dosis</th>
+                <th>Recomendación</th><th>Paciente</th><th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaTratamientos"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel: Pruebas -->
+      <div class="panel-pestana" id="panel-pruebas">
+        <div class="panel-cabecera">
+          <h2>Pruebas diagnósticas</h2>
+          <button class="boton-primario" id="botonCrearPrueba">+ Nueva prueba</button>
+        </div>
+        <div class="filtros">
+          <div class="filtro-campo">
+            <input type="text" id="filtroBuscarPrueba" placeholder="Buscar por nombre de prueba o paciente...">
+          </div>
+        </div>
+        <div class="contenedor-tabla">
+          <table class="tabla-admin">
+            <thead>
+              <tr>
+                <th>ID</th><th>Nombre</th><th>Resultado</th>
+                <th>Fecha</th><th>Paciente</th><th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaPruebas"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel: Estructura -->
+      <div class="panel-pestana" id="panel-estructura">
+        <div class="panel-cabecera">
+          <h2>Operaciones estructurales</h2>
+        </div>
+        <p class="advertencia">⚠️ Estas operaciones modifican la estructura de la base de datos. Úsalas con precaución.</p>
+        <div class="grid-estructura">
+          <div class="tarjeta-estructura">
+            <h3>Crear tabla</h3>
+            <textarea id="inputCrearTabla" placeholder="CREATE TABLE nombre ( ... );"></textarea>
+            <button class="boton-ejecutar" id="botonCrearTabla">Ejecutar</button>
+            <p class="resultado-estructura" id="resultadoCrear"></p>
+          </div>
+          <div class="tarjeta-estructura">
+            <h3>Modificar tabla</h3>
+            <textarea id="inputModificarTabla" placeholder="ALTER TABLE nombre ADD columna tipo;"></textarea>
+            <button class="boton-ejecutar" id="botonModificarTabla">Ejecutar</button>
+            <p class="resultado-estructura" id="resultadoModificar"></p>
+          </div>
+          <div class="tarjeta-estructura">
+            <h3>Eliminar tabla</h3>
+            <textarea id="inputEliminarTabla" placeholder="DROP TABLE nombre;"></textarea>
+            <button class="boton-ejecutar boton-peligro" id="botonEliminarTabla">Ejecutar</button>
+            <p class="resultado-estructura" id="resultadoEliminar"></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal: Médico -->
+  <div class="fondo-modal oculto" id="modalMedico">
+    <div class="tarjeta-modal">
+      <h3 class="modal-titulo" id="tituloModalMedico">Nuevo médico</h3>
+      <input type="hidden" id="idMedicoEditar">
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Nombre completo</label>
+        <input type="text" class="entrada-campo" id="inputNombreMedico" placeholder="Ej: Dr. García López">
+      </div>
+      <div class="fila-dos-columnas">
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Teléfono</label>
+          <input type="text" class="entrada-campo" id="inputTelefonoMedico" placeholder="Ej: 600111222">
+        </div>
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Nivel</label>
+          <select class="entrada-campo" id="inputNivelMedico">
+            <option value="0">Nivel 0 - Admin</option>
+            <option value="1">Nivel 1 - Consultas importantes</option>
+            <option value="2">Nivel 2 - Consultas restringidas</option>
+            <option value="3" selected>Nivel 3 - Consultas básicas</option>
+          </select>
+        </div>
+      </div>
+      <div class="fila-dos-columnas">
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Nombre de usuario</label>
+          <input type="text" class="entrada-campo" id="inputNombreUsuarioMedico" placeholder="Ej: drgarcia">
+        </div>
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Contraseña</label>
+          <input type="password" class="entrada-campo" id="inputContrasenaMedico" placeholder="Contraseña">
+        </div>
+      </div>
+      <p class="mensaje-modal oculto" id="mensajeModalMedico"></p>
+      <div class="modal-acciones">
+        <button class="boton-cancelar-modal" id="botonCancelarModalMedico">Cancelar</button>
+        <button class="boton-enviar-modal" id="botonGuardarMedico">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Paciente -->
+  <div class="fondo-modal oculto" id="modalPaciente">
+    <div class="tarjeta-modal">
+      <h3 class="modal-titulo" id="tituloModalPaciente">Nuevo paciente</h3>
+      <input type="hidden" id="idPacienteEditar">
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Nombre completo</label>
+        <input type="text" class="entrada-campo" id="inputNombrePaciente" placeholder="Ej: Juan Pérez">
+      </div>
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Teléfono</label>
+        <input type="text" class="entrada-campo" id="inputTelefonoPaciente" placeholder="Ej: 611000001">
+      </div>
+      <p class="mensaje-modal oculto" id="mensajeModalPaciente"></p>
+      <div class="modal-acciones">
+        <button class="boton-cancelar-modal" id="botonCancelarModalPaciente">Cancelar</button>
+        <button class="boton-enviar-modal" id="botonGuardarPaciente">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Especialidad -->
+  <div class="fondo-modal oculto" id="modalEspecialidad">
+    <div class="tarjeta-modal">
+      <h3 class="modal-titulo">Nueva especialidad</h3>
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Nombre de la especialidad</label>
+        <input type="text" class="entrada-campo" id="inputNombreEspecialidad" placeholder="Ej: Cardiología">
+      </div>
+      <p class="mensaje-modal oculto" id="mensajeModalEspecialidad"></p>
+      <div class="modal-acciones">
+        <button class="boton-cancelar-modal" id="botonCancelarModalEspecialidad">Cancelar</button>
+        <button class="boton-enviar-modal" id="botonGuardarEspecialidad">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Cita -->
+  <div class="fondo-modal oculto" id="modalCita">
+    <div class="tarjeta-modal">
+      <h3 class="modal-titulo" id="tituloModalCita">Nueva cita</h3>
+      <input type="hidden" id="idCitaEditar">
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Fecha y hora</label>
+        <input type="datetime-local" class="entrada-campo" id="inputFechaIngreso">
+      </div>
+      <div class="fila-dos-columnas">
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Paciente</label>
+          <select class="entrada-campo" id="inputPacienteCita"></select>
+        </div>
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Médico</label>
+          <select class="entrada-campo" id="inputMedicoCita"></select>
+        </div>
+      </div>
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Estado</label>
+        <select class="entrada-campo" id="inputEstadoCita">
+          <option value="Pendiente">Pendiente</option>
+          <option value="Completada">Completada</option>
+          <option value="Cancelada">Cancelada</option>
+        </select>
+      </div>
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Diagnóstico (opcional)</label>
+        <textarea class="entrada-campo" id="inputDiagnostico" rows="3" placeholder="Diagnóstico..."></textarea>
+      </div>
+      <p class="mensaje-modal oculto" id="mensajeModalCita"></p>
+      <div class="modal-acciones">
+        <button class="boton-cancelar-modal" id="botonCancelarModalCita">Cancelar</button>
+        <button class="boton-enviar-modal" id="botonGuardarCita">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Tratamiento -->
+  <div class="fondo-modal oculto" id="modalTratamiento">
+    <div class="tarjeta-modal">
+      <h3 class="modal-titulo" id="tituloModalTratamiento">Nuevo tratamiento</h3>
+      <input type="hidden" id="idTratamientoEditar">
+      <div class="fila-dos-columnas">
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Medicamento</label>
+          <input type="text" class="entrada-campo" id="inputMedicamento" placeholder="Ej: Ibuprofeno">
+        </div>
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Dosis</label>
+          <input type="text" class="entrada-campo" id="inputDosis" placeholder="Ej: 400mg cada 8h">
+        </div>
+      </div>
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Recomendación (opcional)</label>
+        <textarea class="entrada-campo" id="inputRecomendacion" rows="2" placeholder="Ej: Reposo absoluto 3 días"></textarea>
+      </div>
+      <div class="fila-dos-columnas">
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Cita</label>
+          <select class="entrada-campo" id="inputCitaTratamiento"></select>
+        </div>
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Paciente</label>
+          <select class="entrada-campo" id="inputPacienteTratamiento"></select>
+        </div>
+      </div>
+      <p class="mensaje-modal oculto" id="mensajeModalTratamiento"></p>
+      <div class="modal-acciones">
+        <button class="boton-cancelar-modal" id="botonCancelarModalTratamiento">Cancelar</button>
+        <button class="boton-enviar-modal" id="botonGuardarTratamiento">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Prueba -->
+  <div class="fondo-modal oculto" id="modalPrueba">
+    <div class="tarjeta-modal">
+      <h3 class="modal-titulo" id="tituloModalPrueba">Nueva prueba</h3>
+      <input type="hidden" id="idPruebaEditar">
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Nombre de la prueba</label>
+        <input type="text" class="entrada-campo" id="inputNombrePrueba" placeholder="Ej: Electrocardiograma">
+      </div>
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Resultado (opcional)</label>
+        <textarea class="entrada-campo" id="inputResultadoPrueba" rows="2" placeholder="Resultado..."></textarea>
+      </div>
+      <div class="grupo-campo">
+        <label class="etiqueta-campo">Fecha</label>
+        <input type="date" class="entrada-campo" id="inputFechaPrueba">
+      </div>
+      <div class="fila-dos-columnas">
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Cita</label>
+          <select class="entrada-campo" id="inputCitaPrueba"></select>
+        </div>
+        <div class="grupo-campo">
+          <label class="etiqueta-campo">Paciente</label>
+          <select class="entrada-campo" id="inputPacientePrueba"></select>
+        </div>
+      </div>
+      <p class="mensaje-modal oculto" id="mensajeModalPrueba"></p>
+      <div class="modal-acciones">
+        <button class="boton-cancelar-modal" id="botonCancelarModalPrueba">Cancelar</button>
+        <button class="boton-enviar-modal" id="botonGuardarPrueba">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer style="height:48px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;color:#9ca3af;border-top:1px solid #e5e7eb;background-color:white;margin-top:2rem;">
+    <span>© 2026 Clínica Médica — Gabriel Peña</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/scriptsFrontend/RutasProtegidas.js"></script>
+  <script src="../assets/scriptsFrontend/Api.js"></script>
+  <script src="../assets/scriptsFrontend/Admin.js"></script>
+
+</body>
+</html>

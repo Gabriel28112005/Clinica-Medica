@@ -9,6 +9,23 @@ function verificarAcceso() {
         return false;
     }
 
+    try {
+        const payload    = JSON.parse(atob(token.split('.')[1]));
+        const ahora      = Math.floor(Date.now() / 1000);
+
+        if (payload.exp && payload.exp < ahora) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('nivel');
+            window.location.href = '/';
+            return false;
+        }
+    } catch (error) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('nivel');
+        window.location.href = '/';
+        return false;
+    }
+
     return true;
 }
 

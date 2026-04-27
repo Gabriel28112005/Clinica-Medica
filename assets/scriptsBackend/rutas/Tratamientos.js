@@ -6,8 +6,8 @@ const { verificarNivel } = require('../autentificacionRoles/Middleware');
 
 const router = express.Router();
 
-// GET - Obtener todos los tratamientos (niveles 0 y 1)
-router.get('/tratamientos', verificarNivel(0, 1), async (req, res) => {
+// GET - Obtener todos los tratamientos (niveles 0, 1 y 2)
+router.get('/tratamientos', verificarNivel(0, 1, 2), async (req, res) => {
     try {
         const [filas] = await pool.query(
             `SELECT T.*, P.nombrePaciente
