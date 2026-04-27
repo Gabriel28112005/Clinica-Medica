@@ -87,7 +87,9 @@ async function buscarCitasPorFechas() {
     const hasta = document.getElementById('inputHasta').value;
     if (!desde || !hasta) return;
     try {
-        const datos = await peticion('GET', `/api/consultas/citas-por-fechas?desde=${desde}&hasta=${hasta}`);
+        const desdeFormateado = desde + ' 00:00:00';
+        const hastaFormateado = hasta + ' 23:59:59';
+        const datos = await peticion('GET', `/api/consultas/citas-por-fechas?desde=${encodeURIComponent(desdeFormateado)}&hasta=${encodeURIComponent(hastaFormateado)}`);
         renderizarCitasFechas(datos);
     } catch (error) {
         console.error('Error:', error);
@@ -169,7 +171,10 @@ async function cargarTodosTratamientos() {
 
 async function buscarTratamientosPorMedicamento() {
     const medicamento = document.getElementById('inputMedicamentoFiltro').value.trim();
-    if (!medicamento) return;
+    if (!medicamento) {
+        cargarTodosTratamientos();
+        return;
+    }
     try {
         const datos = await peticion('GET', `/api/consultas/tratamientos-por-medicamento?medicamento=${encodeURIComponent(medicamento)}`);
         renderizarTratamientos(datos);
@@ -180,6 +185,7 @@ async function buscarTratamientosPorMedicamento() {
 
 document.getElementById('botonBuscarMedicamento').addEventListener('click', buscarTratamientosPorMedicamento);
 document.getElementById('inputMedicamentoFiltro').addEventListener('keydown', e => { if (e.key === 'Enter') buscarTratamientosPorMedicamento(); });
+document.getElementById('inputMedicamentoFiltro').addEventListener('input', buscarTratamientosPorMedicamento);
 
 // ============================================================
 // PRUEBAS POR TIPO Y FECHA
@@ -192,7 +198,7 @@ function renderizarPruebas(datos) {
             <td>${d.idPrueba}</td>
             <td>${d.nombrePrueba}</td>
             <td>${d.resultadoPrueba || '-'}</td>
-            <td>${d.fechaPrueba}</td>
+            <td>${new Date(d.fechaPrueba).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</td>
             <td>${d.nombrePaciente}</td>
         </tr>`).join('');
 }
@@ -226,6 +232,7 @@ document.getElementById('botonBuscarPruebas').addEventListener('click', buscarPr
 document.getElementById('inputTipoPrueba').addEventListener('keydown',  e => { if (e.key === 'Enter') buscarPruebasPorFiltros(); });
 document.getElementById('inputDesdePrueba').addEventListener('keydown', e => { if (e.key === 'Enter') buscarPruebasPorFiltros(); });
 document.getElementById('inputHastaPrueba').addEventListener('keydown', e => { if (e.key === 'Enter') buscarPruebasPorFiltros(); });
+document.getElementById('inputTipoPrueba').addEventListener('input', buscarPruebasPorFiltros);
 
 // ============================================================
 // INICIALIZACIÓN
