@@ -602,7 +602,7 @@ function renderizarPruebas(datos) {
             <td>${p.idPrueba}</td>
             <td>${p.nombrePrueba}</td>
             <td>${p.resultadoPrueba || '-'}</td>
-            <td>${p.fechaPrueba}</td>
+            <td>${new Date(p.fechaPrueba).toLocaleDateString('es-ES', { timeZone: 'UTC' })}</td>
             <td>${p.nombrePaciente}</td>
             <td>
                 <button class="boton-editar" onclick="prepararEditarPrueba(${p.idPrueba},'${p.nombrePrueba}','${p.resultadoPrueba || ''}','${p.fechaPrueba}',${p.idCita},${p.idPaciente})">Editar</button>
